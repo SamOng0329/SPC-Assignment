@@ -33,6 +33,12 @@ struct Customer {
     bool isActive;
 };
 
+struct CustomerLogin {
+    string customerID;      // links to Customer.id, e.g. C001
+    string username;
+    string password;
+};
+
 // ---- Bicycle Registration and Inventory Tracking ----
 struct Bicycle {
     string id;              // B001
@@ -42,7 +48,6 @@ struct Bicycle {
     string condition;       // Good, Maintenance
     double hourlyRate;
     bool isAvailable;       // false = under maintenance/retired
-
 };
 
 // ---- Rental Booking and Schedule Management ----

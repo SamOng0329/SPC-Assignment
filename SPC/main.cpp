@@ -8,6 +8,7 @@ using namespace std;
 
 // --- Function Prototypes ---
 void displayGateway();
+Customer customerLogin(vector<Customer>& customers, vector<CustomerLogin>& customerLogins);   
 
 Staff loginStaff();
 void runStaffMenu(const Staff& staff, vector<Customer>& customers,
@@ -22,10 +23,18 @@ const vector<Staff> staffList = {
 	{"S002", "Natalie Wong Eei Qi", "natalie", "natalie456"}
 };
 
+
 // --- Main Function ---
 
 int main() {
-	vector<Customer> customers;
+	vector<Customer> customers{
+		{"C001", "Tan Mei Ling", "0123456789", "tanml@gmail.com", "Regular", 3, true}
+	};
+
+	vector<CustomerLogin> customerLogins{
+		{"C001", "tanml", "meiling123"}
+	};
+
 	vector<Bicycle> bicycles;
 	vector<Booking> bookings;
 	vector<Payment> payments;
@@ -46,8 +55,10 @@ int main() {
 			}
 		}
 		else if (gatewayChoice == 2) {
-			cout << "Customer Login Test" << endl;
-			// Customer Login
+			Customer activeCustomer = customerLogin(customers, customerLogins);
+			if (activeCustomer.id != "") {
+				runCustomerMenu(activeCustomer, bicycles, bookings, payments);
+			}
 		}
 		else if (gatewayChoice == 3) {
 			cout << "Customer Register Test" << endl;
@@ -99,6 +110,34 @@ Staff loginStaff() {
 	return emptyStaff;
 }
 
+Customer customerLogin(vector<Customer>& customers, vector<CustomerLogin>& customerLogins) {
+	Customer emptyCustomer = { "", "", "", "", "", 0, false };
+	string username, password;
+	cout << "\n\n  +------------------------------------+" << endl;
+	cout << "  |       CUSTOMER AUTHENTICATION       |" << endl;
+	cout << "  +------------------------------------+" << endl;
+	cout << "  Enter Username -> ";
+	cin >> username;
+	cout << "  Enter Password -> ";
+	cin >> password;
+
+	for (int i = 0; i < customerLogins.size(); ++i) {
+		if (customerLogins[i].username == username && customerLogins[i].password == password) {
+			// Credentials matched, now find the linked Customer profile
+			string custID = customerLogins[i].customerID;
+			for (int j = 0; j < customers.size(); ++j) {
+				if (customers[j].id == custID) {
+					cout << "\n  [+] Login successful." << endl;
+					return customers[j];
+				}
+			}
+		}
+	}
+
+	cout << "\n  [!] Invalid credentials. Please try again." << endl << endl;
+	return emptyCustomer;
+}
+
 void runStaffMenu(const Staff& staff, vector<Customer>& customers, vector<Bicycle>& bicycles, vector<Booking>& bookings, vector<Payment>& payments) {
 	int choice;
 	do {
@@ -148,7 +187,7 @@ void runCustomerMenu(const Customer& cust, vector<Bicycle>& bicycles, vector<Boo
 	int choice;
 	do {
 		cout << "\n\n  +-----------------------------------------+" << endl;
-		cout << "  |               CUSTOMER PORTAL               |" << endl;
+		cout << "  |               CUSTOMER PORTAL            |" << endl;
 		cout << "  +------------------------------------------+" << endl;
 		cout << "  |" << left << setw(40) << " Welcome, " + cust.name << " |" << endl;
 		cout << "  |" << left << setw(40) << " Tier -> "  + cust.memberType << " |" << endl;
