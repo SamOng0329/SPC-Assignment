@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <vector>
 #include "globals.h"
+#include "customer.h"
 
 using namespace std;
 
@@ -11,7 +12,7 @@ void displayGateway();
 Customer customerLogin(vector<Customer>& customers, vector<CustomerLogin>& customerLogins);   
 
 Staff loginStaff();
-void runStaffMenu(const Staff& staff, vector<Customer>& customers,
+void runStaffMenu(const Staff& staff, vector<Customer>& customers, vector<CustomerLogin>& customerLogins, 
 	vector<Bicycle>& bicycles, vector<Booking>& bookings,
 	vector<Payment>& payments);
 
@@ -51,7 +52,7 @@ int main() {
 		if (gatewayChoice == 1) {
 			Staff activeStaff = loginStaff();
 			if(activeStaff.id != "") {
-				runStaffMenu(activeStaff, customers, bicycles, bookings, payments);
+				runStaffMenu(activeStaff, customers, customerLogins, bicycles, bookings, payments);
 			}
 		}
 		else if (gatewayChoice == 2) {
@@ -138,7 +139,7 @@ Customer customerLogin(vector<Customer>& customers, vector<CustomerLogin>& custo
 	return emptyCustomer;
 }
 
-void runStaffMenu(const Staff& staff, vector<Customer>& customers, vector<Bicycle>& bicycles, vector<Booking>& bookings, vector<Payment>& payments) {
+void runStaffMenu(const Staff& staff, vector<Customer>& customers, vector<CustomerLogin>& customerLogins, vector<Bicycle>& bicycles, vector<Booking>& bookings, vector<Payment>& payments) {
 	int choice;
 	do {
 		cout << "\n\n  +----------------------------------------------+" << endl;
@@ -160,6 +161,7 @@ void runStaffMenu(const Staff& staff, vector<Customer>& customers, vector<Bicycl
 			case 1:
 				cout << "\n  [Customer Management Module]" << endl;
 				// Call customer management submenu
+				customerManagementMenu(customers, customerLogins, true);
 				break;
 			case 2:
 				cout << "\n  [Bicycle Registration & Inventory Tracking Module]" << endl;

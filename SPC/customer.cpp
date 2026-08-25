@@ -212,7 +212,7 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             getline(cin >> ws, cust->name);
             if (cust->name.empty()){
                 cout << "Error: Name cannot be empty.\n";
-                return;
+                continue;
             }
             cout << "Name updated successfully.\n";
         }
@@ -221,7 +221,7 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             getline(cin >> ws, cust->phone);
             if (cust->phone.empty()){
                 cout << "Error: Phone number cannot be empty.\n";
-                return;
+                continue;
             }
             cout << "Phone number updated successfully.\n";
         }
@@ -230,7 +230,7 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             getline(cin >> ws, cust->email);
             if (cust->email.empty()){
                 cout << "Error: Email cannot be empty.\n";
-                return;
+                continue;
             }
             cout << "Email updated successfully.\n";
         }
@@ -239,7 +239,7 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             getline(cin >> ws, cust->memberType);
             if (cust->memberType.empty()){
                 cout << "Error: Tier cannot be empty.\n";
-                return;
+                continue;
             }
             cout << "Tier updated successfully.\n";
         }
@@ -255,11 +255,94 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             }
             else {
                 cout << "Error: Invalid input. Please enter Y or N.\n";
-                return;
+                continue;
             }
             cout << "Status updated successfully.\n";
         }
     } while (choice != 0);
+}
+
+void searchCustomers(const vector<Customer>& customers, const string& query){
+    vector<Customer> results;
+
+    for(const Customer& cust : customers){
+     if (toLower(cust.id) == toLower(query) || 
+         toLower(cust.name) == toLower(query) || 
+         cust.phone == query) {
+         results.push_back(cust);
+        }
+    }
+
+    if (results.empty()){
+        cout << "Error: No customer found!" << endl;
+    } else {
+        viewAllCustomer(results);
+    }
+}
+
+void searchCustomerPrompt(const vector<Customer>& customers){
+    string query;
+    cout << "Enter ID, Name, or Phone -> ";
+    getline(cin >> ws, query);
+    searchCustomers(customers, query);
+}
+
+bool deactivateCustomer(vector<Customer>& customers, const string& targetID){
+    Customer* cust = findCustomerById(customers, targetID);
+    if (cust == nullptr){
+        cout << "Error: Customer ID not found" << endl;
+        return false;
+    }
+    cust->isActive = false;
+    return true;
+}
+
+void deactivateCustomerPrompt(vector<Customer>& customers){
+    string targetID;
+    cout << "Enter Customer ID -> ";
+    cin >> targetID;
+    if(deactivateCustomer(customers, targetID)){
+        cout << "Customer deactivated successfully.";
+    } else{
+        cout << "Error: Customer not found.";
+    }
+}
+
+void filterCustomerByTier(const vector<Customer>& customers, const string& tier){
+    vector<Customer> filteredTierCustomer;
+    for(const Customer& cust : customers){
+        if (toLower(cust.memberType) == toLower(tier)){
+            filteredTierCustomer.push_back(cust);
+        }
+    }
+
+    if (filteredTierCustomer.empty()){
+        cout << "Error: No customer found! " << endl;
+    } else {
+        viewAllCustomer(filteredTierCustomer);
+    }
+}
+
+void filterCustomerByTierPrompt(const vector<Customer>& customers){
+    int choice;
+    cout << "\n  Select Tier to Filter:\n";
+    cout << "   1. Regular\n";
+    cout << "   2. Premium\n";
+    cout << "  Choice -> ";
+    cin >> choice;
+
+    if(cin.fail() || choice < 0 || choice > 2){
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Error: Invalid input. Please enter a number (1-2).\n";
+        return;
+    }
+
+    if (choice == 1){
+        filterCustomerByTier(customers, "Regular");
+    } else if (choice == 2){
+        filterCustomerByTier(customers, "Premium");
+    }
 }
 
 void customerManagementMenu(vector<Customer>& customers, vector<CustomerLogin>& logins, bool isStaff){
@@ -272,16 +355,16 @@ void customerManagementMenu(vector<Customer>& customers, vector<CustomerLogin>& 
         cout << "  +-------------------------------------------+\n";
         cout << "   1. Register New Customer\n";
         cout << "   2. View All Customers\n";
-        cout << "   3. Search Customer\n";
-        cout << "   4. Filter Customer by Tier\n";
-        cout << "   5. Update Customer Profile\n";
+        cout << "   3. Update Customer Profile\n";
+        cout << "   4. Search Customer\n";
+        cout << "   5. Filter Customer by Tier\n";
         cout << "   6. Deactivate Customer\n";
         cout << "   0. Back to Main Menu\n";
         cout << "  ---------------------------------------------\n";
         cout << "  Choice -> ";
         cin >> choice;
 
-        if(choice != 1){
+        if(cin.fail() || choice < 0 || choice > 6){
             cin.clear();
             cin.ignore(1000, '\n');
             cout << "\n  Error: Invalid input. Please enter a number (0-6).\n";
@@ -296,16 +379,16 @@ void customerManagementMenu(vector<Customer>& customers, vector<CustomerLogin>& 
                 viewAllCustomer(customers);
                 break;
             case 3:
-                // searchCustomerPrompt(customers, currentUserID, isStaff);
-                break;
-            case 4:
-                // filterCustomerPrompt(customers, currentUserID, isStaff);
-                break;
-            case 5:
                 updateCustomerPrompt(customers, isStaff);
                 break;
+            case 4:
+                searchCustomerPrompt(customers);
+                break;
+            case 5:
+                filterCustomerByTierPrompt(customers);
+                break;
             case 6:
-                // deactivateCustomerPrompt(customers, currentUserID, isStaff);
+                deactivateCustomerPrompt(customers);
                 break;
             case 0:
                 cout << "\n  Returning to Main Menu...\n";

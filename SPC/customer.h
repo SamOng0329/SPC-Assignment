@@ -4,6 +4,7 @@
 #include <vector>
 #include "globals.h"
 
-// I will declare it later
+void customerManagementMenu(vector<Customer>& customers, vector<CustomerLogin>& customerLogins, bool isStaff);
+
 
 #endif 
