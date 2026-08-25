@@ -126,7 +126,6 @@
     <ClCompile Include="Booking.cpp" />
     <ClCompile Include="customer.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Testing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Booking.h" />

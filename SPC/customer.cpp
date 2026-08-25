@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
+#include <regex>
 #include "globals.h"
 #include "customer.h"
 
@@ -77,19 +78,24 @@ bool isNumeric(const string &str){
     return true;
 }
 
+bool isValidEmail(const string& email) {
+    regex pattern("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
+    return regex_match(email, pattern);
+}
+
 
 void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& logins){
     string name, phone, email, username, password;
 
-    cout << "\n+-------------------------------------------+\n";
-    cout << "|            REGISTER NEW CUSTOMER          |\n";
-    cout << "+-------------------------------------------+\n";
+    cout << "\n  +-------------------------------------------+\n";
+    cout << "  |            REGISTER NEW CUSTOMER          |\n";
+    cout << "  +-------------------------------------------+\n";
 
     // Collect name
-    cout << "Enter Full Name -> ";
+    cout << "  Enter Full Name -> ";
     getline(cin >> ws, name); 
     if (name.empty()){
-        cout << "Error: Name cannot be empty.\n";
+        cout << "  [!] Error: Name cannot be empty\n";
         return;
     }
 
@@ -97,11 +103,11 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
     cout << "  Enter Phone Number -> ";
     getline(cin >> ws, phone);
     if (phone.empty()){
-        cout << "Error: Phone number cannot be empty.\n";
+        cout << "  [!] Error: Phone number cannot be empty.\n";
         return;
     }
     if (!isNumeric(phone)){
-        cout << "Error: Invalid phone number format.\n";
+        cout << " [!]Error: Invalid phone number format.\n";
         return;
     }
 
@@ -109,7 +115,11 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
     cout << "  Enter Email -> ";
     getline(cin >> ws, email);
     if (email.empty()){
-        cout << "Error: Email cannot be empty.\n";
+        cout << "  [!] Error: Email cannot be empty.\n";
+        return;
+    }
+    if (!isValidEmail(email)) {
+        cout << "  [!] Error: Invalid email format.";
         return;
     }
 
@@ -117,7 +127,7 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
     cout << "  Enter Username -> ";
     getline(cin >> ws, username);
     if (username.empty()){
-        cout << "Error: Username cannot be empty.\n";
+        cout << "  [!] Error: Username cannot be empty.\n";
         return;
     }
 
@@ -125,7 +135,7 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
     cout << "  Enter Password -> ";
     getline(cin >> ws, password);
     if (password.empty()){
-        cout << "Error: Password cannot be empty.\n";
+        cout << "  [!] Error: Password cannot be empty.\n";
         return;
     }
 
@@ -134,7 +144,7 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
 
 void viewAllCustomer(const vector<Customer>& customers){
     if (customers.empty()){
-        cout << "Error: No customers found." << endl;
+        cout << "  [!] Error: No customers found." << endl;
         return;
     }
 
@@ -185,10 +195,7 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
     do{
         cout << "\n";
         cout << "  +-------------------------------------------+\n";
-        cout << "  |            UPDATE CUSTOMER PROFILE          |\n";
-        cout << "  +-------------------------------------------+\n";
-        cout << "  | " << left << setw(41) << "Welcome, Placeholder" << " |\n";
-        cout << "  | " << left << setw(41) << "Role -> Placeholder" << " |\n";
+        cout << "  |            UPDATE CUSTOMER PROFILE        |\n";
         cout << "  +-------------------------------------------+\n";
         cout << "   1. Update Name\n";
         cout << "   2. Update Phone\n";
@@ -211,37 +218,40 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             cout << "Enter Name -> ";
             getline(cin >> ws, cust->name);
             if (cust->name.empty()){
-                cout << "Error: Name cannot be empty.\n";
+                cout << "  [!] Error: Name cannot be empty.\n";
                 continue;
             }
-            cout << "Name updated successfully.\n";
+            cout << "  [+] Name updated successfully.\n";
         }
         else if (choice == 2){
             cout << "Enter Phone -> ";
             getline(cin >> ws, cust->phone);
             if (cust->phone.empty()){
-                cout << "Error: Phone number cannot be empty.\n";
+                cout << "  [!] Error: Phone number cannot be empty.\n";
                 continue;
             }
-            cout << "Phone number updated successfully.\n";
+            cout << "  [+] Phone number updated successfully.\n";
         }
         else if (choice == 3){
+            string tempEmail;
             cout << "Enter Email -> ";
-            getline(cin >> ws, cust->email);
-            if (cust->email.empty()){
-                cout << "Error: Email cannot be empty.\n";
+            getline(cin >> ws, tempEmail);
+            if (tempEmail.empty()){
+                cout << "  [!] Error: Email cannot be empty.\n";
                 continue;
             }
-            cout << "Email updated successfully.\n";
+            if (!isValidEmail(tempEmail)) {
+                cout << " [!] Error: Invalid Email format.\n";
+            }
         }
         else if (choice == 4){
             cout << "Enter Tier -> ";
             getline(cin >> ws, cust->memberType);
             if (cust->memberType.empty()){
-                cout << "Error: Tier cannot be empty.\n";
+                cout << "  [!] Error: Tier cannot be empty.\n";
                 continue;
             }
-            cout << "Tier updated successfully.\n";
+            cout << "  [+] Tier updated successfully.\n";
         }
         else if (choice == 5){
             char activeChar;
@@ -351,7 +361,7 @@ void customerManagementMenu(vector<Customer>& customers, vector<CustomerLogin>& 
     do{
         cout << "\n";
         cout << "  +-------------------------------------------+\n";
-        cout << "  |            CUSTOMER MANAGEMENT              |\n";
+        cout << "  |            CUSTOMER MANAGEMENT            |\n";
         cout << "  +-------------------------------------------+\n";
         cout << "   1. Register New Customer\n";
         cout << "   2. View All Customers\n";
@@ -368,7 +378,6 @@ void customerManagementMenu(vector<Customer>& customers, vector<CustomerLogin>& 
             cin.clear();
             cin.ignore(1000, '\n');
             cout << "\n  Error: Invalid input. Please enter a number (0-6).\n";
-            continue;
         }
 
         switch(choice){
