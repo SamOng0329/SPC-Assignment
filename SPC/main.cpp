@@ -62,8 +62,8 @@ int main() {
 			}
 		}
 		else if (gatewayChoice == 3) {
-			cout << "Customer Register Test" << endl;
-			// Customer Register
+			//cout << "Customer Register Test" << endl;
+			registerCustomerPrompt(customers, customerLogins);
 		}
 		else if (gatewayChoice == 0) {
 			cout << "\n  Exiting application... Have a great day!" << endl;
@@ -159,7 +159,7 @@ void runStaffMenu(const Staff& staff, vector<Customer>& customers, vector<Custom
 
 		switch(choice) {
 			case 1:
-				cout << "\n  [Customer Management Module]" << endl;
+				//cout << "\n  [Customer Management Module]" << endl;
 				// Call customer management submenu
 				customerManagementMenu(customers, customerLogins, true);
 				break;

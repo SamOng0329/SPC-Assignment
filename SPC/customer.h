@@ -5,6 +5,6 @@
 #include "globals.h"
 
 void customerManagementMenu(vector<Customer>& customers, vector<CustomerLogin>& customerLogins, bool isStaff);
-
+void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& logins);
 
 #endif 

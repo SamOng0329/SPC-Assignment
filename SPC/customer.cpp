@@ -55,7 +55,7 @@ bool registerCustomer(vector<Customer>& customers, vector<CustomerLogin>& logins
                       const string& name, const string& phone, const string& email,
                       const string& username, const string& password){
     if (isUsernameTaken(logins, username)){
-        cout << "Error: Username '" << username << "' is already taken." << endl;
+        cout << "  [!] Error: Username '" << username << "' is already taken." << endl;
         return false;
     }
 
@@ -66,7 +66,7 @@ bool registerCustomer(vector<Customer>& customers, vector<CustomerLogin>& logins
     customers.push_back(newCust);
     logins.push_back(newLogin);
 
-    cout << "Customer '" << name << "' (ID: " << generateNextCustID << ") registered successfully!" << endl;
+    cout << "  [+] Customer '" << name << "' (ID: " << generateNextCustID << ") registered successfully!" << endl;
     return true;
 }
 
@@ -107,7 +107,7 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
         return;
     }
     if (!isNumeric(phone)){
-        cout << " [!]Error: Invalid phone number format.\n";
+        cout << "  [!]Error: Invalid phone number format.\n";
         return;
     }
 
@@ -182,12 +182,12 @@ bool updateCustomerProfile(vector<Customer>& customers, const string& targetID,
 
 void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
     string targetID;
-    cout << "\n Enter target Customer ID -> ";
+    cout << "\n  Enter target Customer ID -> ";
     cin >> targetID;
 
     Customer* cust = findCustomerById(customers, targetID);
     if (cust == nullptr){
-        cout << "Error: Customer ID not found" << endl;
+        cout << "  [!] Error: Customer ID not found" << endl;
         return;
     }
 
@@ -210,12 +210,12 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
         if (cin.fail()){
             cin.clear();
             cin.ignore(1000, '\n');
-            cout << "Error: Invalid input. Please enter a number (0-5).\n";
+            cout << "  [!] Error: Invalid input. Please enter a number (0-5).\n";
             continue;
         }
 
         if (choice == 1){
-            cout << "Enter Name -> ";
+            cout << "  Enter Name -> ";
             getline(cin >> ws, cust->name);
             if (cust->name.empty()){
                 cout << "  [!] Error: Name cannot be empty.\n";
@@ -224,7 +224,7 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             cout << "  [+] Name updated successfully.\n";
         }
         else if (choice == 2){
-            cout << "Enter Phone -> ";
+            cout << "  Enter Phone -> ";
             getline(cin >> ws, cust->phone);
             if (cust->phone.empty()){
                 cout << "  [!] Error: Phone number cannot be empty.\n";
@@ -234,7 +234,7 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
         }
         else if (choice == 3){
             string tempEmail;
-            cout << "Enter Email -> ";
+            cout << "  Enter Email -> ";
             getline(cin >> ws, tempEmail);
             if (tempEmail.empty()){
                 cout << "  [!] Error: Email cannot be empty.\n";
@@ -242,7 +242,10 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             }
             if (!isValidEmail(tempEmail)) {
                 cout << " [!] Error: Invalid Email format.\n";
+                continue;
             }
+            cust->email = tempEmail;
+            cout << "  [+] Email updated successfully.";
         }
         else if (choice == 4){
             cout << "Enter Tier -> ";
@@ -255,7 +258,7 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
         }
         else if (choice == 5){
             char activeChar;
-            cout << "Enter Status (Y/N) -> ";
+            cout << "  Enter Status (Y/N) -> ";
             cin >> activeChar;
             if (tolower(activeChar) == 'y'){
                 cust->isActive = true;
@@ -264,10 +267,10 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
                 cust->isActive = false;
             }
             else {
-                cout << "Error: Invalid input. Please enter Y or N.\n";
+                cout << "  [!] Error: Invalid input. Please enter Y or N.\n";
                 continue;
             }
-            cout << "Status updated successfully.\n";
+            cout << "  [+] Status updated successfully.\n";
         }
     } while (choice != 0);
 }
@@ -284,7 +287,7 @@ void searchCustomers(const vector<Customer>& customers, const string& query){
     }
 
     if (results.empty()){
-        cout << "Error: No customer found!" << endl;
+        cout << "  [!] Error: No customer found!" << endl;
     } else {
         viewAllCustomer(results);
     }
@@ -292,7 +295,7 @@ void searchCustomers(const vector<Customer>& customers, const string& query){
 
 void searchCustomerPrompt(const vector<Customer>& customers){
     string query;
-    cout << "Enter ID, Name, or Phone -> ";
+    cout << "  Enter ID, Name, or Phone -> ";
     getline(cin >> ws, query);
     searchCustomers(customers, query);
 }
@@ -300,7 +303,7 @@ void searchCustomerPrompt(const vector<Customer>& customers){
 bool deactivateCustomer(vector<Customer>& customers, const string& targetID){
     Customer* cust = findCustomerById(customers, targetID);
     if (cust == nullptr){
-        cout << "Error: Customer ID not found" << endl;
+        cout << "  [!] Error: Customer ID not found" << endl;
         return false;
     }
     cust->isActive = false;
@@ -309,12 +312,12 @@ bool deactivateCustomer(vector<Customer>& customers, const string& targetID){
 
 void deactivateCustomerPrompt(vector<Customer>& customers){
     string targetID;
-    cout << "Enter Customer ID -> ";
+    cout << "  Enter Customer ID -> ";
     cin >> targetID;
     if(deactivateCustomer(customers, targetID)){
-        cout << "Customer deactivated successfully.";
+        cout << "  [+] Customer deactivated successfully.";
     } else{
-        cout << "Error: Customer not found.";
+        cout << "  [!] Error: Customer not found.";
     }
 }
 
@@ -327,7 +330,7 @@ void filterCustomerByTier(const vector<Customer>& customers, const string& tier)
     }
 
     if (filteredTierCustomer.empty()){
-        cout << "Error: No customer found! " << endl;
+        cout << "  [! Error: No customer found! " << endl;
     } else {
         viewAllCustomer(filteredTierCustomer);
     }
@@ -344,7 +347,7 @@ void filterCustomerByTierPrompt(const vector<Customer>& customers){
     if(cin.fail() || choice < 0 || choice > 2){
         cin.clear();
         cin.ignore(1000, '\n');
-        cout << "Error: Invalid input. Please enter a number (1-2).\n";
+        cout << "  [!] Error: Invalid input. Please enter a number (1-2).\n";
         return;
     }
 
@@ -377,7 +380,9 @@ void customerManagementMenu(vector<Customer>& customers, vector<CustomerLogin>& 
         if(cin.fail() || choice < 0 || choice > 6){
             cin.clear();
             cin.ignore(1000, '\n');
-            cout << "\n  Error: Invalid input. Please enter a number (0-6).\n";
+            choice = -1;
+            cout << "\n  [!] Error: Invalid input. Please enter a number (0-6).\n";
+            continue;
         }
 
         switch(choice){
