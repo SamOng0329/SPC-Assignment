@@ -33,4 +33,8 @@ long long daysFromCivil(int year, int month, int day);
 // Returns true and set totalMinutes if both date & time valid, else false
 bool toTotalMinutes(const string &dateStr, const string &timeStr, long long &totalMinutes);
 
+// Reads the real system clock and returns "now" in minutes-since-epoch format
+// same as toTotalMinutes for easier comparision
+long long getCurrentTotalMinutes();
+
 #endif

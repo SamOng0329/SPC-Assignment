@@ -1,4 +1,5 @@
 #include <cctype>
+#include <ctime>
 #include "date_utils.h"
 
 using namespace std;
@@ -131,4 +132,18 @@ bool toTotalMinutes(const string &dateStr, const string &timeStr, long long &tot
     // LL(long long) = forces 64-bit integer math to prevent overflow
     totalMinutes = days * 1440LL + hour * 60LL + minute;
     return true;
+}
+
+long long getCurrentTotalMinutes() {
+    time_t now = time(nullptr);
+    tm* localNow = localtime(&now);
+ 
+    int year = localNow->tm_year + 1900;
+    int month = localNow->tm_mon + 1;
+    int day = localNow->tm_mday;
+    int hour = localNow->tm_hour;
+    int minute = localNow->tm_min;
+ 
+    long long days = daysFromCivil(year, month, day);
+    return days * 1440LL + hour * 60LL + minute;
 }
