@@ -3,6 +3,7 @@
 #include <vector>
 #include "globals.h"
 #include "booking.h"
+#include "bicycle.h"
 
 using namespace std;
 
@@ -157,7 +158,7 @@ void runStaffMenu(const Staff& staff, vector<Customer>& customers, vector<Custom
 				// Call customer management submenu
 				break;
 			case 2:
-				cout << "\n  [Bicycle Registration & Inventory Tracking Module]" << endl;
+				bicycleMenu(bicycles, true);
 				// Call bicycle management submenu
 				break;
 			case 3:
@@ -196,7 +197,7 @@ void runCustomerMenu(const Customer& cust, vector<Customer>& customers, vector<B
 
 		switch (choice) {
 		case 1:
-			cout << "Option 1";
+			bicycleMenu(bicycles, false);
 			// Inventory (Bicycle Availability Check)
 			break;
 		case 2:
