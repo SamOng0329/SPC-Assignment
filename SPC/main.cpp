@@ -2,43 +2,37 @@
 #include <iomanip>
 #include <vector>
 #include "globals.h"
-#include "customer.h"
+#include "booking.h"
 
 using namespace std;
 
 
 // --- Function Prototypes ---
 void displayGateway();
+void loadSampleData(vector<Customer> &customers, vector<CustomerLogin> &customerLogins, vector<Bicycle> &bicycles, vector<Staff> &staffList);
 Customer customerLogin(vector<Customer>& customers, vector<CustomerLogin>& customerLogins);   
+Staff loginStaff(const vector<Staff> &staffList);
 
-Staff loginStaff();
-void runStaffMenu(const Staff& staff, vector<Customer>& customers, vector<CustomerLogin>& customerLogins, 
+void runStaffMenu(const Staff& staff, vector<Customer>& customers,
+	vector<CustomerLogin>& customerLogins,
 	vector<Bicycle>& bicycles, vector<Booking>& bookings,
 	vector<Payment>& payments);
 
-void runCustomerMenu(const Customer& customer, vector<Bicycle>& bicycles,
-	vector<Booking>& bookings, vector<Payment>& payments);
-
-const vector<Staff> staffList = {
-	{"S001", "Chong Wen Chun", "chongwc", "chongwc123"},
-	{"S002", "Natalie Wong Eei Qi", "natalie", "natalie456"}
-};
+void runCustomerMenu(const Customer& customer, vector<Customer>& customers, 
+	vector<Bicycle>& bicycles, vector<Booking>& bookings, vector<Payment>& payments);
 
 
 // --- Main Function ---
 
 int main() {
-	vector<Customer> customers{
-		{"C001", "Tan Mei Ling", "0123456789", "tanml@gmail.com", "Regular", 3, true}
-	};
-
-	vector<CustomerLogin> customerLogins{
-		{"C001", "tanml", "meiling123"}
-	};
-
+	vector<Staff> staffList;
+	vector<Customer> customers;
+	vector<CustomerLogin> customerLogins;
 	vector<Bicycle> bicycles;
 	vector<Booking> bookings;
 	vector<Payment> payments;
+
+	loadSampleData(customers, customerLogins, bicycles, staffList);
 
 	// displayLogo();
 	cout << "\n  Welcome to Bicycle Rental Management System!" << endl;
@@ -50,7 +44,7 @@ int main() {
 		cin >> gatewayChoice;
 
 		if (gatewayChoice == 1) {
-			Staff activeStaff = loginStaff();
+			Staff activeStaff = loginStaff(staffList);
 			if(activeStaff.id != "") {
 				runStaffMenu(activeStaff, customers, customerLogins, bicycles, bookings, payments);
 			}
@@ -58,12 +52,12 @@ int main() {
 		else if (gatewayChoice == 2) {
 			Customer activeCustomer = customerLogin(customers, customerLogins);
 			if (activeCustomer.id != "") {
-				runCustomerMenu(activeCustomer, bicycles, bookings, payments);
+				runCustomerMenu(activeCustomer, customers, bicycles, bookings, payments);
 			}
 		}
 		else if (gatewayChoice == 3) {
-			//cout << "Customer Register Test" << endl;
-			registerCustomerPrompt(customers, customerLogins);
+			cout << "Customer Register Test" << endl;
+			// Customer Register
 		}
 		else if (gatewayChoice == 0) {
 			cout << "\n  Exiting application... Have a great day!" << endl;
@@ -89,7 +83,7 @@ void displayGateway() {
 	cout << "  +----------------------------------------------+" << endl;
 }
 
-Staff loginStaff() {
+Staff loginStaff(const vector<Staff> &staffList) {
 	Staff emptyStaff = { "", "", "", "" };
 	string username, password;
 	cout << "\n\n  +------------------------------------+" << endl;
@@ -114,9 +108,9 @@ Staff loginStaff() {
 Customer customerLogin(vector<Customer>& customers, vector<CustomerLogin>& customerLogins) {
 	Customer emptyCustomer = { "", "", "", "", "", 0, false };
 	string username, password;
-	cout << "\n\n  +------------------------------------+" << endl;
+	cout << "\n\n  +-------------------------------------+" << endl;
 	cout << "  |       CUSTOMER AUTHENTICATION       |" << endl;
-	cout << "  +------------------------------------+" << endl;
+	cout << "  +-------------------------------------+" << endl;
 	cout << "  Enter Username -> ";
 	cin >> username;
 	cout << "  Enter Password -> ";
@@ -159,17 +153,15 @@ void runStaffMenu(const Staff& staff, vector<Customer>& customers, vector<Custom
 
 		switch(choice) {
 			case 1:
-				//cout << "\n  [Customer Management Module]" << endl;
+				cout << "\n  [Customer Management Module]" << endl;
 				// Call customer management submenu
-				customerManagementMenu(customers, customerLogins, true);
 				break;
 			case 2:
 				cout << "\n  [Bicycle Registration & Inventory Tracking Module]" << endl;
 				// Call bicycle management submenu
 				break;
 			case 3:
-				cout << "\n  [Rental Booking & Schedule Management Module]" << endl;
-				// Call booking management submenu
+				bookingMenu(staff.name, staff.id, "", true, bookings, bicycles, customers);
 				break;
 			case 4:
 				cout << "\n  [Billing & Statistics Reporting Module]" << endl;
@@ -179,47 +171,61 @@ void runStaffMenu(const Staff& staff, vector<Customer>& customers, vector<Custom
 				cout << "\n  Logging out..." << endl << endl;
 				break;
 			default:
-				cout << "\n  [!] Invalid option. Please try again." << endl;
+				cout << "\n  [!] Invalid option. Please try again." << endl << endl;
 		}
 	} while (choice != 0);
 }
 
-void runCustomerMenu(const Customer& cust, vector<Bicycle>& bicycles, vector<Booking>& bookings, vector<Payment>& payments) {
+void runCustomerMenu(const Customer& cust, vector<Customer>& customers, vector<Bicycle>& bicycles, vector<Booking>& bookings, vector<Payment>& payments) {
 
 	int choice;
 	do {
-		cout << "\n\n  +-----------------------------------------+" << endl;
-		cout << "  |               CUSTOMER PORTAL            |" << endl;
-		cout << "  +------------------------------------------+" << endl;
-		cout << "  |" << left << setw(40) << " Welcome, " + cust.name << " |" << endl;
-		cout << "  |" << left << setw(40) << " Tier -> "  + cust.memberType << " |" << endl;
-		cout << "  +------------------------------------------+" << endl;
+		cout << "\n\n  +---------------------------------------------+" << endl;
+		cout << "  |               CUSTOMER PORTAL               |" << endl;
+		cout << "  +---------------------------------------------+" << endl;
+		cout << "  |" << left << setw(44) << " Welcome, " + cust.name << " |" << endl;
+		cout << "  |" << left << setw(44) << " Tier -> "  + cust.memberType << " |" << endl;
+		cout << "  +---------------------------------------------+" << endl;
 		cout << "   1. Browse Available Bicycles" << endl;
-		cout << "   2. Make a Rental Booking" << endl;
-		cout << "   3. View My Active Bookings" << endl;
+		cout << "   2. Booking & Schedule Services" << endl;
+		cout << "   3. Billing & Payment Gateway" << endl;
 		cout << "   0. Logout" << endl;
-		cout << "  --------------------------------------------" << endl;
+		cout << "  -----------------------------------------------" << endl;
 		cout << "  Choice -> ";
 		cin >> choice;
 
 		switch (choice) {
 		case 1:
 			cout << "Option 1";
-			// displayAllBicycles(bicycles);
+			// Inventory (Bicycle Availability Check)
 			break;
 		case 2:
-			cout << "Option ";
-			// createBooking(cust.id, bicycles, bookings);
+			bookingMenu(cust.name, cust.id, cust.memberType, false, bookings, bicycles, customers);
 			break;
 		case 3:
 			cout << "Option 3";
-			// viewActiveBookings(cust.id, bookings);
+			// Billing Payment Gateway Function
 			break;
 		case 0:
-			cout << "\n  Logging out..." << endl;
+			cout << "\n  Logging out..." << endl << endl;
 			break;
 		default:
-			cout << "\n  [!] Invalid option. Please try again." << endl;
+			cout << "\n  [!] Invalid option. Please try again." << endl << endl;
 		}
 	} while (choice != 0);
+}
+
+void loadSampleData(vector<Customer> &customers, vector<CustomerLogin> &customerLogins, vector<Bicycle> &bicycles, vector<Staff> &staffList){
+	customers.push_back({"C001", "Tan Mei Ling", "0123456789", "tanml@gmail.com", "Regular", 3, true}); 
+	customers.push_back({"C002", "Chan Jun Jie", "0123456789", "chanjj@mail.com", "Premium", 3, true});
+
+	customerLogins.push_back({"C001", "tanml", "meiling123"});
+	customerLogins.push_back({"C002", "chanjj", "junjie456"});
+ 
+    bicycles.push_back({"BK001", "Trek", "FX2", "Hybrid", "Good", 8.00, true});
+    bicycles.push_back({"BK002", "Giant", "Talon", "Mountain", "Good", 10.00, true});
+    bicycles.push_back({"BK003", "Specialized", "Allez", "Road", "Maintenance", 12.00, false});
+
+	staffList.push_back({"S001", "Chong Wen Chun", "chongwc", "chongwc123"});
+	staffList.push_back({"S002", "Natalie Wong Eei Qi", "natalie", "natalie456"});
 }
