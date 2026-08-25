@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/enc_temp_folder/f1464a935516b9295866641f647954/booking.cpp
+/enc_temp_folder/384d44889a528cd5c16ee9feecbd477/customer.cpp
