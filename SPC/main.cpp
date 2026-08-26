@@ -4,6 +4,7 @@
 #include "globals.h"
 #include "booking.h"
 #include "bicycle.h"
+#include "payment.h"
 
 using namespace std;
 
@@ -165,8 +166,7 @@ void runStaffMenu(const Staff& staff, vector<Customer>& customers, vector<Custom
 				bookingMenu(staff.name, staff.id, "", true, bookings, bicycles, customers);
 				break;
 			case 4:
-				cout << "\n  [Billing & Statistics Reporting Module]" << endl;
-				// Call billing and reporting functions (submenu)
+				billingMenu(bookings, payments, customers, bicycles, true);
 				break;
 			case 0:
 				cout << "\n  Logging out..." << endl << endl;
@@ -204,8 +204,7 @@ void runCustomerMenu(const Customer& cust, vector<Customer>& customers, vector<B
 			bookingMenu(cust.name, cust.id, cust.memberType, false, bookings, bicycles, customers);
 			break;
 		case 3:
-			cout << "Option 3";
-			// Billing Payment Gateway Function
+			billingMenu(bookings, payments, customers, bicycles, false);
 			break;
 		case 0:
 			cout << "\n  Logging out..." << endl << endl;

@@ -11,6 +11,7 @@ const int MAX_DURATION_HOURS = 72;                  // booking
 
 const double SST_RATE = 0.06;                       // billing
 const double DAMAGE_FEE = 20.0;                     // billing
+const double PREMIUM_DISCOUNT_RATE = 0.10;                  // billing
 
 
 // SHARED STRUCTS
@@ -74,7 +75,14 @@ struct Booking {
 
 // ---- Billing and Payment Processing ----
 struct Payment { 
-
+    string paymentID;        // P001
+    string bookingID;       // links to Booking.bookingID
+    string customerID;  
+    string paymentMethod;    // Cash, Card, E-Wallet
+    double amountPaid;
+    double totalAmount;
+    double change;
+    string paymentDate;      // DD/MM/YYYY
 };
 
 // continue more struct if got
