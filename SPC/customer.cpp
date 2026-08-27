@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 #include <regex>
 #include "globals.h"
 #include "customer.h"
@@ -86,14 +87,16 @@ bool isValidEmail(const string& email) {
 void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& logins){
     string name, phone, email, username, password;
 
+    // Clean buffer once at the start of the prompt
+    if (cin.peek() == '\n') {
+        cin.ignore();
+    }
+
     cout << "\n  +-------------------------------------------+\n";
     cout << "  |            REGISTER NEW CUSTOMER          |\n";
     cout << "  +-------------------------------------------+\n";
 
     // Collect name
-    if (cin.peek() == '\n') {
-        cin.ignore();
-    }
     cout << "  Enter Full Name -> ";
     getline(cin, name); 
     if (name.empty()){
@@ -102,9 +105,6 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
     }
 
     // Collect phone
-    if (cin.peek() == '\n') {
-        cin.ignore();
-    }
     cout << "  Enter Phone Number -> ";
     getline(cin, phone);
     if (phone.empty()){
@@ -117,9 +117,6 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
     }
 
     // Collect email
-    if (cin.peek() == '\n') {
-        cin.ignore();
-    }
     cout << "  Enter Email -> ";
     getline(cin, email);
     if (email.empty()){
@@ -132,9 +129,6 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
     }
 
     // Collect username
-    if (cin.peek() == '\n') {
-        cin.ignore();
-    }
     cout << "  Enter Username -> ";
     getline(cin, username);
     if (username.empty()){
@@ -143,9 +137,6 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
     }
 
     // Collect password
-    if (cin.peek() == '\n') {
-        cin.ignore();
-    }
     cout << "  Enter Password -> ";
     getline(cin, password);
     if (password.empty()){
@@ -228,10 +219,12 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             continue;
         }
 
+        // Clean buffer once since cin >> choice leaves a newline
+        if (cin.peek() == '\n') {
+            cin.ignore();
+        }
+
         if (choice == 1){
-            if (cin.peek() == '\n') {
-                cin.ignore();
-            }
             cout << "  Enter Name -> ";
             getline(cin, cust->name);
             if (cust->name.empty()){
@@ -241,9 +234,6 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             cout << "  [+] Name updated successfully.\n";
         }
         else if (choice == 2){
-            if (cin.peek() == '\n') {
-                cin.ignore();
-            }
             cout << "  Enter Phone -> ";
             getline(cin, cust->phone);
             if (cust->phone.empty()){
@@ -254,9 +244,6 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
         }
         else if (choice == 3){
             string tempEmail;
-            if (cin.peek() == '\n') {
-                cin.ignore();
-            }
             cout << "  Enter Email -> ";
             getline(cin, tempEmail);
             if (tempEmail.empty()){
@@ -271,9 +258,6 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             cout << "  [+] Email updated successfully.";
         }
         else if (choice == 4){
-            if (cin.peek() == '\n') {
-                cin.ignore();
-            }
             cout << "Enter Tier -> ";
             getline(cin, cust->memberType);
             if (cust->memberType.empty()){
