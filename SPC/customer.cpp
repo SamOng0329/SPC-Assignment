@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include <algorithm>
 #include <regex>
 #include "globals.h"
 #include "customer.h"
@@ -92,16 +91,22 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
     cout << "  +-------------------------------------------+\n";
 
     // Collect name
+    if (cin.peek() == '\n') {
+        cin.ignore();
+    }
     cout << "  Enter Full Name -> ";
-    getline(cin >> ws, name); 
+    getline(cin, name); 
     if (name.empty()){
         cout << "  [!] Error: Name cannot be empty\n";
         return;
     }
 
     // Collect phone
+    if (cin.peek() == '\n') {
+        cin.ignore();
+    }
     cout << "  Enter Phone Number -> ";
-    getline(cin >> ws, phone);
+    getline(cin, phone);
     if (phone.empty()){
         cout << "  [!] Error: Phone number cannot be empty.\n";
         return;
@@ -112,8 +117,11 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
     }
 
     // Collect email
+    if (cin.peek() == '\n') {
+        cin.ignore();
+    }
     cout << "  Enter Email -> ";
-    getline(cin >> ws, email);
+    getline(cin, email);
     if (email.empty()){
         cout << "  [!] Error: Email cannot be empty.\n";
         return;
@@ -124,16 +132,22 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
     }
 
     // Collect username
+    if (cin.peek() == '\n') {
+        cin.ignore();
+    }
     cout << "  Enter Username -> ";
-    getline(cin >> ws, username);
+    getline(cin, username);
     if (username.empty()){
         cout << "  [!] Error: Username cannot be empty.\n";
         return;
     }
 
     // Collect password
+    if (cin.peek() == '\n') {
+        cin.ignore();
+    }
     cout << "  Enter Password -> ";
-    getline(cin >> ws, password);
+    getline(cin, password);
     if (password.empty()){
         cout << "  [!] Error: Password cannot be empty.\n";
         return;
@@ -215,8 +229,11 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
         }
 
         if (choice == 1){
+            if (cin.peek() == '\n') {
+                cin.ignore();
+            }
             cout << "  Enter Name -> ";
-            getline(cin >> ws, cust->name);
+            getline(cin, cust->name);
             if (cust->name.empty()){
                 cout << "  [!] Error: Name cannot be empty.\n";
                 continue;
@@ -224,8 +241,11 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             cout << "  [+] Name updated successfully.\n";
         }
         else if (choice == 2){
+            if (cin.peek() == '\n') {
+                cin.ignore();
+            }
             cout << "  Enter Phone -> ";
-            getline(cin >> ws, cust->phone);
+            getline(cin, cust->phone);
             if (cust->phone.empty()){
                 cout << "  [!] Error: Phone number cannot be empty.\n";
                 continue;
@@ -234,8 +254,11 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
         }
         else if (choice == 3){
             string tempEmail;
+            if (cin.peek() == '\n') {
+                cin.ignore();
+            }
             cout << "  Enter Email -> ";
-            getline(cin >> ws, tempEmail);
+            getline(cin, tempEmail);
             if (tempEmail.empty()){
                 cout << "  [!] Error: Email cannot be empty.\n";
                 continue;
@@ -248,8 +271,11 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             cout << "  [+] Email updated successfully.";
         }
         else if (choice == 4){
+            if (cin.peek() == '\n') {
+                cin.ignore();
+            }
             cout << "Enter Tier -> ";
-            getline(cin >> ws, cust->memberType);
+            getline(cin, cust->memberType);
             if (cust->memberType.empty()){
                 cout << "  [!] Error: Tier cannot be empty.\n";
                 continue;
@@ -295,8 +321,11 @@ void searchCustomers(const vector<Customer>& customers, const string& query){
 
 void searchCustomerPrompt(const vector<Customer>& customers){
     string query;
+    if (cin.peek() == '\n') {
+        cin.ignore();
+    }
     cout << "  Enter ID, Name, or Phone -> ";
-    getline(cin >> ws, query);
+    getline(cin, query);
     searchCustomers(customers, query);
 }
 
