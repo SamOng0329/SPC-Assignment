@@ -5,6 +5,7 @@
 #include "booking.h"
 #include "bicycle.h"
 #include "payment.h"
+#include "customer.h"
 
 using namespace std;
 
@@ -58,8 +59,7 @@ int main() {
 			}
 		}
 		else if (gatewayChoice == 3) {
-			cout << "Customer Register Test" << endl;
-			// Customer Register
+			registerCustomerPrompt(customers, customerLogins);
 		}
 		else if (gatewayChoice == 0) {
 			cout << "\n  Exiting application... Have a great day!" << endl;
@@ -155,8 +155,8 @@ void runStaffMenu(const Staff& staff, vector<Customer>& customers, vector<Custom
 
 		switch(choice) {
 			case 1:
-				cout << "\n  [Customer Management Module]" << endl;
 				// Call customer management submenu
+				customerManagementMenu(customers, customerLogins, true);
 				break;
 			case 2:
 				bicycleMenu(bicycles, true);
