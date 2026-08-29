@@ -76,18 +76,39 @@ void registerNewBicycle(vector<Bicycle> &bicycles) {
     newBike.isAvailable = true;
     newBike.condition = "Good";
 
+    cin.ignore(1000, '\n');
+    
     cout << "\n  [Registering New Bicycle - " << newBike.id << "]\n";
+    
     cout << "  Enter Brand -> ";
-    getline(cin >> ws, newBike.brand);
+    getline(cin, newBike.brand);
+    if (newBike.brand.empty()) {
+        cout << "  [!] Error: Bicycle Brand cannot be empty.\n";
+        return; 
+    }
     
     cout << "  Enter Model -> ";
-    getline(cin >> ws, newBike.model);
+    getline(cin, newBike.model);
+    if (newBike.model.empty()) {
+        cout << "  [!] Error: Bicycle Model cannot be empty.\n";
+        return;
+    }
     
     cout << "  Enter Type (Mountain/Road/Hybrid) -> ";
-    getline(cin >> ws, newBike.type);
+    getline(cin, newBike.type);
+    if (newBike.type.empty()) {
+        cout << "  [!] Error: Bicycle Type cannot be empty.\n";
+        return;
+    }
     
     cout << "  Enter Hourly Rate (RM) -> ";
     cin >> newBike.hourlyRate;
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "  [!] Error: Hourly Rate must be a valid number.\n";
+        return;
+    }
 
     bicycles.push_back(newBike);
     cout << "  [+] Successfully registered " << newBike.brand << " " << newBike.model << "!\n";
@@ -131,17 +152,26 @@ void updateBicycleStatus(vector<Bicycle> &bicycles) {
         return;
     }
 
-    cout << "\n  [Current Status of " << bike->id << "]\n";
-    cout << "  Condition: " << bike->condition << "\n";
-    cout << "  Available: " << (bike->isAvailable ? "Yes" : "No") << "\n";
-
+    string newCondition;
     cout << "\n  Enter New Condition (e.g., Good, Needs Repair) -> ";
-    getline(cin >> ws, bike->condition);
+    getline(cin >> ws, newCondition);
+    if (newCondition.empty()) {
+        cout << "  [!] Error: Condition cannot be empty.\n";
+        return; 
+    }
+    bike->condition = newCondition;
 
     char availChar;
     cout << "  Is it available for rent? (Y/N) -> ";
     cin >> availChar;
     
+    if (cin.fail() || (tolower(availChar) != 'y' && tolower(availChar) != 'n')) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "  [!] Error: Invalid input. Please enter 'Y' or 'N'. Update aborted.\n";
+        return;
+    }
+
     if (tolower(availChar) == 'y') {
         bike->isAvailable = true;
     } else {
@@ -173,37 +203,33 @@ void removeBicycle(vector<Bicycle> &bicycles) {
     cout << "  [!] Error: Bicycle ID not found.\n";
 }
 
-// --- 附加功能 (Extra Feature)：生成维护与库存报告 ---
 void generateMaintenanceReport(const vector<Bicycle> &bicycles) {
-    int total = bicycles.size();
-    int availableCount = 0;
-    int maintenanceCount = 0;
-
-    cout << "\n  +-------------------------------------------+\n";
-    cout << "  |          SYSTEM MAINTENANCE REPORT        |\n";
-    cout << "  +-------------------------------------------+\n";
-
-    if (total == 0) {
-        cout << "  | No bicycles in the system yet.            |\n";
-        cout << "  +-------------------------------------------+\n\n";
+   if (bicycles.empty()) {
+        cout << "  [!] Error: No bicycles in inventory to generate report.\n";
         return;
     }
 
-    for (const Bicycle &bike : bicycles) {
+    int total = bicycles.size();
+    int available = 0;
+    int maintenance = 0;
+
+    for (const Bicycle& bike : bicycles) {
         if (bike.isAvailable) {
-            availableCount++;
+            available++;
         } else {
-            maintenanceCount++;
+            maintenance++;
         }
     }
 
-    double readiness = ((double)availableCount / total) * 100;
+    double readiness = ((double)available / total) * 100.0;
 
-    cout << "  | Total Fleet Size    : " << left << setw(19) << total << " |\n";
-    cout << "  | Ready for Rent      : " << left << setw(19) << availableCount << " |\n";
-    cout << "  | Under Maintenance   : " << left << setw(19) << maintenanceCount << " |\n";
+    cout << "\n  +-------------------------------------------+\n";
+    cout << "  |         FLEET MAINTENANCE REPORT          |\n";
     cout << "  +-------------------------------------------+\n";
-    cout << "  | Fleet Readiness     : " << left << setw(18) << fixed << setprecision(1) << readiness << "% |\n";
+    cout << "   Total Bicycles Registered : " << total << "\n";
+    cout << "   Available for Rent        : " << available << "\n";
+    cout << "   Currently in Maintenance  : " << maintenance << "\n";
+    cout << "  ---------------------------------------------\n";
+    cout << "   Fleet Readiness Score     : " << fixed << setprecision(2) << readiness << "%\n";
     cout << "  +-------------------------------------------+\n";
-    cout << "  [DONE] Report generated successfully.\n\n";
 }
