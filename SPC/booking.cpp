@@ -74,18 +74,42 @@ void bookingMenu(const string &name, const string &currentUserID, const string &
 			}
 		}
 		else if(choice == 3){
-			string id;
-			cout << "\n  Enter Booking ID to Modify -> ";
-			cin >> id;
-			if(!modifyBooking(bookings, bicycles, id, currentUserID, isStaff)){
-				cout << "\n  [!] Booking not found, not active, or you do not have permission to modify." << endl << endl;
+			bool hasBookings;
+			if(isStaff){
+				viewFullSchedule(bookings);
+				hasBookings = !bookings.empty();
+			} else{
+				hasBookings = viewMyBookings(bookings, currentUserID);
+			}
+ 
+			if(hasBookings){
+				string id;
+				cout << "\n  Enter Booking ID to Modify -> ";
+				cin >> id;
+				if(!modifyBooking(bookings, bicycles, id, currentUserID, isStaff)){
+					cout << "  [!] Booking not found, not active, or you do not have permission to modify." << endl << endl;
+				}
+			} else{
+				cout << "\n  [!] There is no booking to modify." << endl << endl;
 			}
 		}
 		else if(choice == 4){
-		string id;
-			cout << "\n  Enter Booking ID to Cancel -> ";
-			cin >> id;
-			cancelBooking(bookings, id, currentUserID, isStaff);
+			bool hasBookings;
+			if(isStaff){
+				viewFullSchedule(bookings);
+				hasBookings = !bookings.empty();
+			} else{
+				hasBookings = viewMyBookings(bookings, currentUserID);
+			}
+ 
+			if(hasBookings){
+				string id;
+				cout << "\n  Enter Booking ID to Cancel -> ";
+				cin >> id;
+				cancelBooking(bookings, id, currentUserID, isStaff);
+			} else{
+				cout << "\n  [!] There is no booking to cancel." << endl << endl;
+			}
 		}
 		else if(isStaff && choice == 5){
 			viewFullSchedule(bookings);
@@ -114,7 +138,7 @@ bool createBooking(vector<Booking> &bookings, vector<Bicycle> &bicycles, vector<
 	Bicycle *bicycle = nullptr; // declare as empty first
 
 	cout << "\n  Available Bicycles:" << endl;
-	// viewAvailableBicycles(bicycles);
+	viewBicycleInventory(bicycles);
 	cout << endl;
 
 	// repeat until a valid bicycleID is entered
@@ -241,6 +265,8 @@ bool viewMyBookings(const vector<Booking> &bookings, const string &customerID){
     cout << "  +-------+--------------------+----------------------+-------------------+----------+-------------+------------+-------------+------------+" << endl;
 
     for (const auto& b : bookings) {
+		if(!isBookingOwnedByCustomer(b, customerID)) continue; // skip other customer's bookings
+
         string bikeDisplay = b.bicycleName.empty() ? b.bicycleID : b.bicycleName + " (" + b.bicycleID + ")";
         string startDisplay = b.startDate + " " + b.startTime;
 
@@ -294,7 +320,10 @@ bool viewBookingRecord(const vector<Booking> &bookings, const string &bookingID)
 
 bool modifyBooking(vector<Booking> &bookings, vector<Bicycle> &bicycles, const string &bookingID, const string &requesterID, bool isStaff){
 	int index = findBookingIndex(bookings, bookingID);
-	if(index == -1) return false;	// -1 means false (value return in findBookingIndex func)
+	// -1 means false (value return in findBookingIndex func)
+	if(index == -1){
+		return false;
+	}
 
 	Booking &b = bookings[index];
 

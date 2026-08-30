@@ -121,11 +121,11 @@ void viewBicycleInventory(const vector<Bicycle> &bicycles) {
     }
 
     cout << fixed << setprecision(2);
-    cout << "\n  +--------------------------------------------------------------------------------------------------+\n";
-    cout << "  |                                     BICYCLE INVENTORY                                            |\n";
-    cout << "  +-------+-----------------+-----------------+----------+-------------+-----------------+-----------+\n";
-    cout << "  | ID    | Brand           | Model           | Type     | Hourly (RM) | Condition       | Status    |\n";
-    cout << "  +-------+-----------------+-----------------+----------+-------------+-----------------+-----------+\n";
+    cout << "\n  +----------------------------------------------------------------------------------------------------+\n";
+    cout << "  |                                       BICYCLE INVENTORY                                            |\n";
+    cout << "  +-------+-----------------+-----------------+----------+-------------+-----------------+-------------+\n";
+    cout << "  | ID    | Brand           | Model           | Type     | Hourly (RM) | Condition       | Status      |\n";
+    cout << "  +-------+-----------------+-----------------+----------+-------------+-----------------+-------------+\n";
     
     for (const Bicycle &bike : bicycles) {
         string statusStr = bike.isAvailable ? "Available" : "Maintenance"; 
@@ -136,9 +136,9 @@ void viewBicycleInventory(const vector<Bicycle> &bicycles) {
              << " | " << left << setw(8)  << bike.type
              << " | " << right << setw(11) << bike.hourlyRate
              << " | " << left << setw(15) << bike.condition
-             << " | " << left << setw(9)  << statusStr << " |\n";
+             << " | " << left << setw(11)  << statusStr << " |\n";
     }
-    cout << "  +-------+-----------------+-----------------+----------+-------------+-----------------+-----------+\n\n";
+    cout << "  +-------+-----------------+-----------------+----------+-------------+-----------------+-------------+\n\n";
 }
 
 void updateBicycleStatus(vector<Bicycle> &bicycles) {
