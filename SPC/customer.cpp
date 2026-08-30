@@ -256,63 +256,85 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             cin.ignore();
         }
 
-        if (choice == 1){
-            cout << "  Enter Name -> ";
-            getline(cin, cust.name);
-            if (cust.name.empty()){
-                cout << "  [!] Error: Name cannot be empty.\n";
-                continue;
+        switch(choice){
+            case 1: {
+                string tempName;
+                cout << "  Enter Name -> ";
+                getline(cin, tempName);
+                if (tempName.empty()){
+                    cout << "  [!] Error: Name cannot be empty.\n";
+                    break;
+                }
+                updateCustomerProfile(customers, targetID, tempName, cust.phone,
+                                       cust.email, cust.memberType, cust.isActive);
+                cout << "  [+] Name updated successfully.\n";
+                break;
             }
-            cout << "  [+] Name updated successfully.\n";
-        }
-        else if (choice == 2){
-            cout << "  Enter Phone -> ";
-            getline(cin, cust.phone);
-            if (cust.phone.empty()){
-                cout << "  [!] Error: Phone number cannot be empty.\n";
-                continue;
+            case 2: {
+                string tempPhone;
+                cout << "  Enter Phone -> ";
+                getline(cin, tempPhone);
+                if (tempPhone.empty()){
+                    cout << "  [!] Error: Phone number cannot be empty.\n";
+                    break;
+                }
+                updateCustomerProfile(customers, targetID, cust.name, tempPhone,
+                                       cust.email, cust.memberType, cust.isActive);
+                cout << "  [+] Phone number updated successfully.\n";
+                break;
             }
-            cout << "  [+] Phone number updated successfully.\n";
-        }
-        else if (choice == 3){
-            string tempEmail;
-            cout << "  Enter Email -> ";
-            getline(cin, tempEmail);
-            if (tempEmail.empty()){
-                cout << "  [!] Error: Email cannot be empty.\n";
-                continue;
+            case 3: {
+                string tempEmail;
+                cout << "  Enter Email -> ";
+                getline(cin, tempEmail);
+                if (tempEmail.empty()){
+                    cout << "  [!] Error: Email cannot be empty.\n";
+                    break;
+                }
+                if (!isValidEmail(tempEmail)) {
+                    cout << "  [!] Error: Invalid Email format.\n";
+                    break;
+                }
+                updateCustomerProfile(customers, targetID, cust.name, cust.phone,
+                                       tempEmail, cust.memberType, cust.isActive);
+                cout << "  [+] Email updated successfully.\n";
+                break;
             }
-            if (!isValidEmail(tempEmail)) {
-                cout << " [!] Error: Invalid Email format.\n";
-                continue;
+            case 4: {
+                string tempTier;
+                cout << "  Enter Tier -> ";
+                getline(cin, tempTier);
+                if (tempTier.empty()){
+                    cout << "  [!] Error: Tier cannot be empty.\n";
+                    break;
+                }
+                updateCustomerProfile(customers, targetID, cust.name, cust.phone,
+                                       cust.email, tempTier, cust.isActive);
+                cout << "  [+] Tier updated successfully.\n";
+                break;
             }
-            cust.email = tempEmail;
-            cout << "  [+] Email updated successfully.";
-        }
-        else if (choice == 4){
-            cout << "Enter Tier -> ";
-            getline(cin, cust.memberType);
-            if (cust.memberType.empty()){
-                cout << "  [!] Error: Tier cannot be empty.\n";
-                continue;
+            case 5: {
+                char activeChar;
+                cout << "  Enter Status (Y/N) -> ";
+                cin >> activeChar;
+                bool tempActive;
+                if (tolower(activeChar) == 'y'){
+                    tempActive = true;
+                } else if (tolower(activeChar) == 'n'){
+                    tempActive = false;
+                } else {
+                    cout << "  [!] Error: Invalid input. Please enter Y or N.\n";
+                    break;
+                }
+                updateCustomerProfile(customers, targetID, cust.name, cust.phone,
+                                       cust.email, cust.memberType, tempActive);
+                cout << "  [+] Status updated successfully.\n";
+                break;
             }
-            cout << "  [+] Tier updated successfully.\n";
-        }
-        else if (choice == 5){
-            char activeChar;
-            cout << "  Enter Status (Y/N) -> ";
-            cin >> activeChar;
-            if (tolower(activeChar) == 'y'){
-                cust.isActive = true;
-            }
-            else if (tolower(activeChar) == 'n'){
-                cust.isActive = false;
-            }
-            else {
-                cout << "  [!] Error: Invalid input. Please enter Y or N.\n";
-                continue;
-            }
-            cout << "  [+] Status updated successfully.\n";
+            case 0:
+                break;
+            default:
+                cout << "  [!] Error: Invalid choice. Please enter a number (0-5).\n";
         }
     } while (choice != 0);
 }
@@ -368,56 +390,62 @@ void customerUpdateProfilePrompt(Customer& cust, vector<Customer>& customers) {
             cin.ignore();
         }
 
-        if (choice == 1) {
-            string tempName;
-            cout << "  Enter New Name -> ";
-            getline(cin, tempName);
-            if (tempName.empty()) {
-                cout << "  [!] Error: Name cannot be empty.\n";
-                continue;
+        switch (choice) {
+            case 1: {
+                string tempName;
+                cout << "  Enter New Name -> ";
+                getline(cin, tempName);
+                if (tempName.empty()) {
+                    cout << "  [!] Error: Name cannot be empty.\n";
+                    break;
+                }
+                updateCustomerProfile(customers, currentCust.id, tempName, currentCust.phone,
+                                       currentCust.email, currentCust.memberType, currentCust.isActive);
+                cust.name = tempName;
+                cout << "  [+] Name updated successfully.\n";
+                break;
             }
-            currentCust.name = tempName;
-            cust.name = tempName;
-            cout << "  [+] Name updated successfully.\n";
-        }
-        else if (choice == 2) {
-            string tempPhone;
-            cout << "  Enter New Phone Number -> ";
-            getline(cin, tempPhone);
-            if (tempPhone.empty()) {
-                cout << "  [!] Error: Phone number cannot be empty.\n";
-                continue;
+            case 2: {
+                string tempPhone;
+                cout << "  Enter New Phone Number -> ";
+                getline(cin, tempPhone);
+                if (tempPhone.empty()) {
+                    cout << "  [!] Error: Phone number cannot be empty.\n";
+                    break;
+                }
+                if (!isNumeric(tempPhone)) {
+                    cout << "  [!] Error: Invalid phone number format (numbers only).\n";
+                    break;
+                }
+                updateCustomerProfile(customers, currentCust.id, currentCust.name, tempPhone,
+                                       currentCust.email, currentCust.memberType, currentCust.isActive);
+                cust.phone = tempPhone;
+                cout << "  [+] Phone number updated successfully.\n";
+                break;
             }
-            if (!isNumeric(tempPhone)) {
-                cout << "  [!] Error: Invalid phone number format (numbers only).\n";
-                continue;
+            case 3: {
+                string tempEmail;
+                cout << "  Enter New Email -> ";
+                getline(cin, tempEmail);
+                if (tempEmail.empty()) {
+                    cout << "  [!] Error: Email cannot be empty.\n";
+                    break;
+                }
+                if (!isValidEmail(tempEmail)) {
+                    cout << "  [!] Error: Invalid Email format.\n";
+                    break;
+                }
+                updateCustomerProfile(customers, currentCust.id, currentCust.name, currentCust.phone,
+                                       tempEmail, currentCust.memberType, currentCust.isActive);
+                cust.email = tempEmail;
+                cout << "  [+] Email updated successfully.\n";
+                break;
             }
-            currentCust.phone = tempPhone;
-            cust.phone = tempPhone;
-            cout << "  [+] Phone number updated successfully.\n";
-        }
-        else if (choice == 3) {
-            string tempEmail;
-            cout << "  Enter New Email -> ";
-            getline(cin, tempEmail);
-            if (tempEmail.empty()) {
-                cout << "  [!] Error: Email cannot be empty.\n";
-                continue;
-            }
-            if (!isValidEmail(tempEmail)) {
-                cout << "  [!] Error: Invalid Email format.\n";
-                continue;
-            }
-            currentCust.email = tempEmail;
-            cust.email = tempEmail;
-            cout << "  [+] Email updated successfully.\n";
-        }
-        else if (choice == 0) {
-            cout << "\n  Returning to Customer Portal...\n";
-            break;
-        }
-        else {
-            cout << "  [!] Error: Invalid choice. Please enter a number between 0 and 3.\n";
+            case 0:
+                cout << "\n  Returning to Customer Portal...\n";
+                break;
+            default:
+                cout << "  [!] Error: Invalid choice. Please enter a number between 0 and 3.\n";
         }
     } while (choice != 0);
 }
