@@ -80,9 +80,18 @@ bool processPayment(vector<Booking> &bookings, vector<Payment> &payments,
     }
 
    
-    char damageChoice;
-    cout << "  Did the bicycle incur any damage during rental? (Y/N) -> ";
-    cin >> damageChoice;
+   char damageChoice;
+    while (true) {
+        cout << "  Did the bicycle incur any damage during rental? (Y/N) -> ";
+        cin >> damageChoice;
+        if (cin.fail() || (tolower(damageChoice) != 'y' && tolower(damageChoice) != 'n')) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "  [!] Error: Invalid input. Please enter 'Y' or 'N'.\n";
+        } else {
+            break; 
+        }
+    }
     if (tolower(damageChoice) == 'y') {
         b.hasDamage = true;
         if (bike != nullptr) {
@@ -114,12 +123,21 @@ bool processPayment(vector<Booking> &bookings, vector<Payment> &payments,
 
    
     int methodChoice;
-    cout << "\n  Select Payment Method:\n";
-    cout << "   1. Cash\n";
-    cout << "   2. Credit / Debit Card\n";
-    cout << "   3. E-Wallet (TnG / DuitNow)\n";
-    cout << "  Choice -> ";
-    cin >> methodChoice;
+    while (true) {
+        cout << "\n  Select Payment Method:\n";
+        cout << "   1. Cash\n";
+        cout << "   2. Credit / Debit Card\n";
+        cout << "   3. E-Wallet (TnG / DuitNow)\n";
+        cout << "  Choice -> ";
+        cin >> methodChoice;
+        if (cin.fail() || methodChoice < 1 || methodChoice > 3) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "  [!] Error: Invalid choice. Please enter 1, 2, or 3.\n";
+        } else {
+            break;
+        }
+    }
 
     if (methodChoice == 1) {
         b.paymentMethod = "Cash";
