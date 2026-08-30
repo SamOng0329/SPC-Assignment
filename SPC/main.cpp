@@ -21,7 +21,7 @@ void runStaffMenu(const Staff& staff, vector<Customer>& customers,
 	vector<Bicycle>& bicycles, vector<Booking>& bookings,
 	vector<Payment>& payments);
 
-void runCustomerMenu(const Customer& customer, vector<Customer>& customers, 
+void runCustomerMenu(Customer& customer, vector<Customer>& customers, 
 	vector<Bicycle>& bicycles, vector<Booking>& bookings, vector<Payment>& payments);
 
 
@@ -177,7 +177,7 @@ void runStaffMenu(const Staff& staff, vector<Customer>& customers, vector<Custom
 	} while (choice != 0);
 }
 
-void runCustomerMenu(const Customer& cust, vector<Customer>& customers, vector<Bicycle>& bicycles, vector<Booking>& bookings, vector<Payment>& payments) {
+void runCustomerMenu(Customer& cust, vector<Customer>& customers, vector<Bicycle>& bicycles, vector<Booking>& bookings, vector<Payment>& payments) {
 
 	int choice;
 	do {
@@ -190,6 +190,7 @@ void runCustomerMenu(const Customer& cust, vector<Customer>& customers, vector<B
 		cout << "   1. Browse Available Bicycles" << endl;
 		cout << "   2. Booking & Schedule Services" << endl;
 		cout << "   3. Billing & Payment Gateway" << endl;
+		cout << "   4. Update Profile" << endl;
 		cout << "   0. Logout" << endl;
 		cout << "  -----------------------------------------------" << endl;
 		cout << "  Choice -> ";
@@ -205,6 +206,9 @@ void runCustomerMenu(const Customer& cust, vector<Customer>& customers, vector<B
 			break;
 		case 3:
 			billingMenu(bookings, payments, customers, bicycles, false);
+			break;
+		case 4:
+			customerUpdateProfilePrompt(cust, customers);
 			break;
 		case 0:
 			cout << "\n  Logging out..." << endl << endl;

@@ -23,6 +23,7 @@ bool updateCustomerProfile(vector<Customer>& customers, const string& targetID,
                            const string& name, const string& phone, const string& email,
                            const string& tier, bool isActive);
 void updateCustomerPrompt(vector<Customer>& customers, bool isStaff);
+void customerUpdateProfilePrompt(Customer& cust, vector<Customer>& customers);
 void searchCustomers(const vector<Customer>& customers, const string& query);
 void searchCustomerPrompt(const vector<Customer>& customers);
 bool deleteCustomer(vector<Customer>& customers, vector<CustomerLogin>& logins, const string& targetID);

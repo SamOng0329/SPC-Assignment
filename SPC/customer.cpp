@@ -171,7 +171,7 @@ void viewAllCustomer(const vector<Customer>& customers){
     cout << "  +------+--------------------+--------------+-------------------------+---------+---------------+----------+" << endl;
     cout << "  | ID   | Name               | Phone        | Email                   | Tier    | Total Rentals | Status   |" << endl;
     cout << "  +------+--------------------+--------------+-------------------------+---------+---------------+----------+" << endl;
-    for (const Customer& cust : customers) {
+    for (const auto& cust : customers) {
         cout << "  | " << left << setw(4) << cust.id
              << " | " << left << setw(18) << (cust.name.length() > 18 ? cust.name.substr(0, 15) + "..." : cust.name)
              << " | " << left << setw(12) << formatPhoneNumber(cust.phone)
@@ -203,15 +203,34 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
     cout << "\n  Enter target Customer ID -> ";
     cin >> targetID;
 
-    Customer* cust = findCustomerById(customers, targetID);
-    if (cust == nullptr){
+    int foundIndex = -1;
+    for (int i = 0; i < customers.size(); ++i) {
+        if (customers[i].id == targetID) {
+            foundIndex = i;
+            break;
+        }
+    }
+
+    if (foundIndex == -1){
         cout << "  [!] Error: Customer ID not found" << endl;
         return;
     }
 
+    Customer& cust = customers[foundIndex];
+
     int choice;
     do{
         cout << "\n";
+        cout << "  +-------------------------------------------+\n";
+        cout << "  |             CUSTOMER DETAILS              |\n";
+        cout << "  +-------------------------------------------+\n";
+        cout << "  | ID            : " << left << setw(26) << cust.id << "|\n";
+        cout << "  | Name          : " << left << setw(26) << (cust.name.length() > 26 ? cust.name.substr(0, 23) + "..." : cust.name) << "|\n";
+        cout << "  | Phone         : " << left << setw(26) << formatPhoneNumber(cust.phone) << "|\n";
+        cout << "  | Email         : " << left << setw(26) << (cust.email.length() > 26 ? cust.email.substr(0, 23) + "..." : cust.email) << "|\n";
+        cout << "  | Member Tier   : " << left << setw(26) << cust.memberType << "|\n";
+        cout << "  | Total Rentals : " << left << setw(26) << cust.totalRentals << "|\n";
+        cout << "  | Account Status: " << left << setw(26) << (cust.isActive ? "Active" : "Inactive") << "|\n";
         cout << "  +-------------------------------------------+\n";
         cout << "  |            UPDATE CUSTOMER PROFILE        |\n";
         cout << "  +-------------------------------------------+\n";
@@ -239,8 +258,8 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
 
         if (choice == 1){
             cout << "  Enter Name -> ";
-            getline(cin, cust->name);
-            if (cust->name.empty()){
+            getline(cin, cust.name);
+            if (cust.name.empty()){
                 cout << "  [!] Error: Name cannot be empty.\n";
                 continue;
             }
@@ -248,8 +267,8 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
         }
         else if (choice == 2){
             cout << "  Enter Phone -> ";
-            getline(cin, cust->phone);
-            if (cust->phone.empty()){
+            getline(cin, cust.phone);
+            if (cust.phone.empty()){
                 cout << "  [!] Error: Phone number cannot be empty.\n";
                 continue;
             }
@@ -267,13 +286,13 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
                 cout << " [!] Error: Invalid Email format.\n";
                 continue;
             }
-            cust->email = tempEmail;
+            cust.email = tempEmail;
             cout << "  [+] Email updated successfully.";
         }
         else if (choice == 4){
             cout << "Enter Tier -> ";
-            getline(cin, cust->memberType);
-            if (cust->memberType.empty()){
+            getline(cin, cust.memberType);
+            if (cust.memberType.empty()){
                 cout << "  [!] Error: Tier cannot be empty.\n";
                 continue;
             }
@@ -284,16 +303,121 @@ void updateCustomerPrompt(vector<Customer>& customers, bool isStaff){
             cout << "  Enter Status (Y/N) -> ";
             cin >> activeChar;
             if (tolower(activeChar) == 'y'){
-                cust->isActive = true;
+                cust.isActive = true;
             }
             else if (tolower(activeChar) == 'n'){
-                cust->isActive = false;
+                cust.isActive = false;
             }
             else {
                 cout << "  [!] Error: Invalid input. Please enter Y or N.\n";
                 continue;
             }
             cout << "  [+] Status updated successfully.\n";
+        }
+    } while (choice != 0);
+}
+
+void customerUpdateProfilePrompt(Customer& cust, vector<Customer>& customers) {
+    int foundIndex = -1;
+    for (int i = 0; i < customers.size(); ++i) {
+        if (customers[i].id == cust.id) {
+            foundIndex = i;
+            break;
+        }
+    }
+
+    if (foundIndex == -1) {
+        cout << "\n  [!] Error: Customer record not found." << endl;
+        return;
+    }
+
+    Customer& currentCust = customers[foundIndex];
+
+    int choice;
+    do {
+        cout << "\n";
+        cout << "  +-------------------------------------------+\n";
+        cout << "  |             CUSTOMER DETAILS              |\n";
+        cout << "  +-------------------------------------------+\n";
+        cout << "  | ID            : " << left << setw(26) << currentCust.id << "|\n";
+        cout << "  | Name          : " << left << setw(26) << (currentCust.name.length() > 26 ? currentCust.name.substr(0, 23) + "..." : currentCust.name) << "|\n";
+        cout << "  | Phone         : " << left << setw(26) << formatPhoneNumber(currentCust.phone) << "|\n";
+        cout << "  | Email         : " << left << setw(26) << (currentCust.email.length() > 26 ? currentCust.email.substr(0, 23) + "..." : currentCust.email) << "|\n";
+        cout << "  | Member Tier   : " << left << setw(26) << currentCust.memberType << "|\n";
+        cout << "  | Total Rentals : " << left << setw(26) << currentCust.totalRentals << "|\n";
+        cout << "  | Account Status: " << left << setw(26) << (currentCust.isActive ? "Active" : "Inactive") << "|\n";
+        cout << "  +-------------------------------------------+\n";
+        cout << "  |            UPDATE YOUR PROFILE            |\n";
+        cout << "  +-------------------------------------------+\n";
+        cout << "   1. Update Name\n";
+        cout << "   2. Update Phone Number\n";
+        cout << "   3. Update Email\n";
+        cout << "   0. Back to Customer Portal\n";
+        cout << "  ---------------------------------------------\n";
+        cout << "  Choice -> ";
+        cin >> choice;
+
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "  [!] Error: Invalid input. Please enter a number (0-3).\n";
+            continue;
+        }
+
+        if (cin.peek() == '\n') {
+            cin.ignore();
+        }
+
+        if (choice == 1) {
+            string tempName;
+            cout << "  Enter New Name -> ";
+            getline(cin, tempName);
+            if (tempName.empty()) {
+                cout << "  [!] Error: Name cannot be empty.\n";
+                continue;
+            }
+            currentCust.name = tempName;
+            cust.name = tempName;
+            cout << "  [+] Name updated successfully.\n";
+        }
+        else if (choice == 2) {
+            string tempPhone;
+            cout << "  Enter New Phone Number -> ";
+            getline(cin, tempPhone);
+            if (tempPhone.empty()) {
+                cout << "  [!] Error: Phone number cannot be empty.\n";
+                continue;
+            }
+            if (!isNumeric(tempPhone)) {
+                cout << "  [!] Error: Invalid phone number format (numbers only).\n";
+                continue;
+            }
+            currentCust.phone = tempPhone;
+            cust.phone = tempPhone;
+            cout << "  [+] Phone number updated successfully.\n";
+        }
+        else if (choice == 3) {
+            string tempEmail;
+            cout << "  Enter New Email -> ";
+            getline(cin, tempEmail);
+            if (tempEmail.empty()) {
+                cout << "  [!] Error: Email cannot be empty.\n";
+                continue;
+            }
+            if (!isValidEmail(tempEmail)) {
+                cout << "  [!] Error: Invalid Email format.\n";
+                continue;
+            }
+            currentCust.email = tempEmail;
+            cust.email = tempEmail;
+            cout << "  [+] Email updated successfully.\n";
+        }
+        else if (choice == 0) {
+            cout << "\n  Returning to Customer Portal...\n";
+            break;
+        }
+        else {
+            cout << "  [!] Error: Invalid choice. Please enter a number between 0 and 3.\n";
         }
     } while (choice != 0);
 }
