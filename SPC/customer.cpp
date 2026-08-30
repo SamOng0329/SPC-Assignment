@@ -335,7 +335,6 @@ bool deleteCustomer(vector<Customer>& customers, vector<CustomerLogin>& logins, 
 
     string deletedName = cust->name;
 
-    // Remove customer from customers vector
     for (int i = 0; i < customers.size(); i++){
         if (customers[i].id == targetID){
             customers.erase(customers.begin() + i);
@@ -343,7 +342,6 @@ bool deleteCustomer(vector<Customer>& customers, vector<CustomerLogin>& logins, 
         }
     }
 
-    // Remove associated login credentials from logins vector
     for (int i = 0; i < logins.size(); i++){
         if (logins[i].customerID == targetID){
             logins.erase(logins.begin() + i);
@@ -351,7 +349,7 @@ bool deleteCustomer(vector<Customer>& customers, vector<CustomerLogin>& logins, 
         }
     }
 
-    cout << "  [+] Customer '" << deletedName << "' (ID: " << targetID << ") deleted successfully!" << endl;
+    cout << "  [-] Customer '" << deletedName << "' (ID: " << targetID << ") deleted successfully!" << endl;
     return true;
 }
 
