@@ -171,7 +171,7 @@ void viewAllCustomer(const vector<Customer>& customers){
     cout << "  +------+--------------------+--------------+-------------------------+---------+---------------+----------+" << endl;
     cout << "  | ID   | Name               | Phone        | Email                   | Tier    | Total Rentals | Status   |" << endl;
     cout << "  +------+--------------------+--------------+-------------------------+---------+---------------+----------+" << endl;
-    for (const auto& cust : customers) {
+    for (const Customer& cust : customers) {
         cout << "  | " << left << setw(4) << cust.id
              << " | " << left << setw(18) << (cust.name.length() > 18 ? cust.name.substr(0, 15) + "..." : cust.name)
              << " | " << left << setw(12) << formatPhoneNumber(cust.phone)
