@@ -190,7 +190,7 @@ void runCustomerMenu(Customer& cust, vector<Customer>& customers, vector<Bicycle
 		cout << "   1. Browse Available Bicycles" << endl;
 		cout << "   2. Booking & Schedule Services" << endl;
 		cout << "   3. Billing & Payment Gateway" << endl;
-		cout << "   4. Update Profile" << endl;
+		cout << "   4. View / Update Profile" << endl;
 		cout << "   0. Logout" << endl;
 		cout << "  -----------------------------------------------" << endl;
 		cout << "  Choice -> ";
