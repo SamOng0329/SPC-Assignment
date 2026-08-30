@@ -10,6 +10,7 @@ string toLower(string str);
 bool isUsernameTaken(const vector<CustomerLogin>& logins, const string& username);
 bool isNumeric(const string &str);
 bool isValidEmail(const string& email);
+string formatPhoneNumber(const string& phone);
 
 // Core Customer Functions
 Customer* findCustomerById(vector<Customer>& customers, const string& customerID);

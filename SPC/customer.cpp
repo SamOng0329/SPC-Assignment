@@ -83,6 +83,15 @@ bool isValidEmail(const string& email) {
     return regex_match(email, pattern);
 }
 
+string formatPhoneNumber(const string& phone) {
+    if (phone.length() == 10) {
+        return phone.substr(0, 3) + " " + phone.substr(3, 3) + " " + phone.substr(6, 4);
+    } else if (phone.length() == 11) {
+        return phone.substr(0, 3) + " " + phone.substr(3, 4) + " " + phone.substr(7, 4);
+    }
+    return phone;
+}
+
 
 void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& logins){
     string name, phone, email, username, password;
@@ -161,13 +170,13 @@ void viewAllCustomer(const vector<Customer>& customers){
     for (const auto& cust : customers) {
         cout << "  | " << left << setw(4) << cust.id
              << " | " << left << setw(18) << (cust.name.length() > 18 ? cust.name.substr(0, 15) + "..." : cust.name)
-             << " | " << left << setw(12) << cust.phone
+             << " | " << left << setw(12) << formatPhoneNumber(cust.phone)
              << " | " << left << setw(23) << (cust.email.length() > 23 ? cust.email.substr(0, 20) + "..." : cust.email)
              << " | " << left << setw(7) << cust.memberType
              << " | " << right << setw(13) << cust.totalRentals
              << " | " << left << setw(8) << (cust.isActive ? "Active" : "Inactive") << " |" << endl;
-            }
-            cout << "  +------+--------------------+--------------+-------------------------+---------+---------------+----------+" << endl;
+    }
+    cout << "  +------+--------------------+--------------+-------------------------+---------+---------------+----------+" << endl;
 }
 
 bool updateCustomerProfile(vector<Customer>& customers, const string& targetID,
