@@ -25,8 +25,8 @@ bool updateCustomerProfile(vector<Customer>& customers, const string& targetID,
 void updateCustomerPrompt(vector<Customer>& customers, bool isStaff);
 void searchCustomers(const vector<Customer>& customers, const string& query);
 void searchCustomerPrompt(const vector<Customer>& customers);
-bool deactivateCustomer(vector<Customer>& customers, const string& targetID);
-void deactivateCustomerPrompt(vector<Customer>& customers);
+bool deleteCustomer(vector<Customer>& customers, vector<CustomerLogin>& logins, const string& targetID);
+void deleteCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& logins);
 void filterCustomerByTier(const vector<Customer>& customers, const string& tier);
 void filterCustomerByTierPrompt(const vector<Customer>& customers);
 void customerManagementMenu(vector<Customer>& customers, vector<CustomerLogin>& customerLogins, bool isStaff);

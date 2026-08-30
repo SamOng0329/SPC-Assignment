@@ -326,25 +326,40 @@ void searchCustomerPrompt(const vector<Customer>& customers){
     searchCustomers(customers, query);
 }
 
-bool deactivateCustomer(vector<Customer>& customers, const string& targetID){
+bool deleteCustomer(vector<Customer>& customers, vector<CustomerLogin>& logins, const string& targetID){
     Customer* cust = findCustomerById(customers, targetID);
     if (cust == nullptr){
-        cout << "  [!] Error: Customer ID not found" << endl;
+        cout << "  [!] Error: Customer ID not found." << endl;
         return false;
     }
-    cust->isActive = false;
+
+    string deletedName = cust->name;
+
+    // Remove customer from customers vector
+    for (int i = 0; i < customers.size(); i++){
+        if (customers[i].id == targetID){
+            customers.erase(customers.begin() + i);
+            break;
+        }
+    }
+
+    // Remove associated login credentials from logins vector
+    for (int i = 0; i < logins.size(); i++){
+        if (logins[i].customerID == targetID){
+            logins.erase(logins.begin() + i);
+            break;
+        }
+    }
+
+    cout << "  [+] Customer '" << deletedName << "' (ID: " << targetID << ") deleted successfully!" << endl;
     return true;
 }
 
-void deactivateCustomerPrompt(vector<Customer>& customers){
+void deleteCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& logins){
     string targetID;
-    cout << "  Enter Customer ID -> ";
+    cout << "\n  Enter Customer ID to Delete -> ";
     cin >> targetID;
-    if(deactivateCustomer(customers, targetID)){
-        cout << "  [+] Customer deactivated successfully.";
-    } else{
-        cout << "  [!] Error: Customer not found.";
-    }
+    deleteCustomer(customers, logins, targetID);
 }
 
 void filterCustomerByTier(const vector<Customer>& customers, const string& tier){
@@ -397,7 +412,7 @@ void customerManagementMenu(vector<Customer>& customers, vector<CustomerLogin>& 
         cout << "   3. Update Customer Profile\n";
         cout << "   4. Search Customer\n";
         cout << "   5. Filter Customer by Tier\n";
-        cout << "   6. Deactivate Customer\n";
+        cout << "   6. Delete Customer\n";
         cout << "   0. Back to Main Menu\n";
         cout << "  ---------------------------------------------\n";
         cout << "  Choice -> ";
@@ -428,7 +443,7 @@ void customerManagementMenu(vector<Customer>& customers, vector<CustomerLogin>& 
                 filterCustomerByTierPrompt(customers);
                 break;
             case 6:
-                deactivateCustomerPrompt(customers);
+                deleteCustomerPrompt(customers, logins);
                 break;
             case 0:
                 cout << "\n  Returning to Main Menu...\n";
