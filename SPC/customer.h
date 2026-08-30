@@ -16,8 +16,8 @@ string formatPhoneNumber(const string& phone);
 Customer* findCustomerById(vector<Customer>& customers, const string& customerID);
 bool registerCustomer(vector<Customer>& customers, vector<CustomerLogin>& logins,
                       const string& name, const string& phone, const string& email,
-                      const string& username, const string& password);
-void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& logins);
+                      const string& username, const string& password, bool isStaff = false);
+void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& logins, bool isStaff = false);
 void viewAllCustomer(const vector<Customer>& customers);
 bool updateCustomerProfile(vector<Customer>& customers, const string& targetID,
                            const string& name, const string& phone, const string& email,

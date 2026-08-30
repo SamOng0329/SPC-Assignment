@@ -53,7 +53,7 @@ bool isUsernameTaken(const vector<CustomerLogin>& logins, const string& username
 
 bool registerCustomer(vector<Customer>& customers, vector<CustomerLogin>& logins,
                       const string& name, const string& phone, const string& email,
-                      const string& username, const string& password){
+                      const string& username, const string& password, bool isStaff){
     if (isUsernameTaken(logins, username)){
         cout << "  [!] Error: Username '" << username << "' is already taken." << endl;
         return false;
@@ -66,7 +66,11 @@ bool registerCustomer(vector<Customer>& customers, vector<CustomerLogin>& logins
     customers.push_back(newCust);
     logins.push_back(newLogin);
 
-    cout << "  [+] Customer '" << name << "' (ID: " << generateNextCustID << ") registered successfully!" << endl;
+    if (isStaff) {
+        cout << "  [+] Customer '" << name << "' (ID: " << generateNextCustID << ") registered successfully!" << endl;
+    } else {
+        cout << "  [+] Customer '" << name << "' registered successfully!" << endl;
+    }
     return true;
 }
 
@@ -93,7 +97,7 @@ string formatPhoneNumber(const string& phone) {
 }
 
 
-void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& logins){
+void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& logins, bool isStaff){
     string name, phone, email, username, password;
 
     // Clean buffer once at the start of the prompt
@@ -153,7 +157,7 @@ void registerCustomerPrompt(vector<Customer>& customers, vector<CustomerLogin>& 
         return;
     }
 
-    registerCustomer(customers, logins, name, phone, email, username, password);
+    registerCustomer(customers, logins, name, phone, email, username, password, isStaff);
 }
 
 void viewAllCustomer(const vector<Customer>& customers){
@@ -409,7 +413,7 @@ void customerManagementMenu(vector<Customer>& customers, vector<CustomerLogin>& 
 
         switch(choice){
             case 1:
-                registerCustomerPrompt(customers, logins);
+                registerCustomerPrompt(customers, logins, isStaff);
                 break;
             case 2:
                 viewAllCustomer(customers);
