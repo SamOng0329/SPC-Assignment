@@ -2,14 +2,6 @@
 
 A console-based C++ application for running a bicycle rental shop: customers, bicycle inventory, bookings, and billing, all driven by a role-based login and text menus.
 
-```
-        __o        __o        __o
-      _`\<,_     _`\<,_     _`\<,_
-     (_)/ (_)   (_)/ (_)   (_)/ (_)
-
-   Welcome to Bicycle Rental Management System
-```
-
 ## What it does
 
 This is a menu-driven simulation of a bike rental shop's back office. On startup you log in as staff, log in as a customer, or register as a new customer. Depending on your role, you get a different set of menus:
